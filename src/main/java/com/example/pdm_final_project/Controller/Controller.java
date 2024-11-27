@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,16 +16,16 @@ import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
-@AllArgsConstructor
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class Controller {
-    private TaskService taskService;
-    private ModelMapper modelMapper;
+    private final TaskService taskService;
+    private final ModelMapper modelMapper;
 
     @GetMapping("/tasks")
     public List<TaskResponse> getALlTasks(){
         log.info("Api GET /expenses called");
-        List<TaskDTO> list = taskService.getAllExpenses();
+        List<TaskDTO> list = taskService.getAllTasks();
         log.info("Printing the data from service: {}", list);
         List<TaskResponse> responses = list.stream().map(taskDTO -> mapToExpenseResponse(taskDTO))
             .collect(Collectors.toList());

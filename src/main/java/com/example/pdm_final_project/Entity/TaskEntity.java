@@ -24,7 +24,7 @@ public class TaskEntity {
     private String Description;
     private long labelId;
     @CreationTimestamp
-    @Column(nullable = false,updatable = false )
+    @Column(nullable = false,updatable = true )
     private Timestamp dueDate;
     private Timestamp createdAt;
     @UpdateTimestamp
