@@ -23,15 +23,15 @@ public class TodoService {
     }
 
     public List<TodoEntity> getTasksByBoard(Long boardId) {
-        return todoRepository.findByBoardId(boardId);
+        return todoRepository.findByBoard_BoardId(boardId);
     }
 
     public List<TodoEntity> getTasksByUser(Long userId) {
-        return todoRepository.findByUserId(userId);
+        return todoRepository.findByUser_User_Id(userId);
     }
 
     public List<TodoEntity> getTasksByLabel(Long labelId) {
-        return todoRepository.findByLabelId(labelId);
+        return todoRepository.findByLabel_LabelId(labelId);
     }
 
     public List<TodoEntity> getTasksByStatus(String status) {
@@ -50,6 +50,7 @@ public class TodoService {
             existingTodo.setDescription(todoDetails.getDescription());
             existingTodo.setStatus(todoDetails.getStatus());
             existingTodo.setDueDate(todoDetails.getDueDate());
+            existingTodo.setCreatedAt(todoDetails.getCreatedAt());
             existingTodo.setBoard(todoDetails.getBoard());
             existingTodo.setUser(todoDetails.getUser());
             existingTodo.setLabel(todoDetails.getLabel());

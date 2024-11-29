@@ -22,12 +22,12 @@ public class BoardService {
         return boardRepository.findById(id);
     }
 
-    public List<Board> getBoardsByName(String name) {
-        return boardRepository.findByName(name);
+    public List<Board> getBoardByName(String name) {
+        return boardRepository.findByNameContaining(name);
     }
 
     public List<Board> getBoardsByCreatedAt() {
-        return boardRepository.findByCreatedAt();
+        return boardRepository.findAllByOrderByCreatedAtDesc();
     }
 
     public Board createBoard(Board board) {

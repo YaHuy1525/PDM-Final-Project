@@ -8,9 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ActivityLogRepository extends JpaRepository<ActivityLog, Long> {
-    List<ActivityLog> findByUser(Long userId);
-    List<ActivityLog> findByTask(Long taskId);
-    List<ActivityLog> findByTimestampBetweenOrderByTimestampDesc(Timestamp start, Timestamp end);
-    List<ActivityLog> findByUserUserIdAndTimestampBetweenOrderByTimestampDesc(
-        Long userId, Timestamp start, Timestamp end);
+//    List<ActivityLog> findByUser(Long userId);
+//    List<ActivityLog> findByTask(Long taskId);
 }
