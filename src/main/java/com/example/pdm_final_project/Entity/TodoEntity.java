@@ -1,32 +1,38 @@
 package com.example.pdm_final_project.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
-@Table(name = "Todo")
+@Table(name = "tasks")
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class TaskEntity {
+public class TodoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-    @Column(unique = true)
+    private Long taskId;
+
     private String title;
+    private String description;
     private String status;
-    private String Description;
-    private long labelId;
-    @CreationTimestamp
-    @Column(nullable = false,updatable = true )
     private Timestamp dueDate;
     private Timestamp createdAt;
-    @UpdateTimestamp
-    private Timestamp updateAt;
+
+    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "label_id")
+    private Label label;
+
+    @OneToMany(mappedBy = "task")
+    private List<ActivityLog> activityLogs;
 }
