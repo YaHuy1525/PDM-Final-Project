@@ -10,28 +10,31 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long user_Id;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(unique = true)
     private String username;
     private String password;
     private String fullname;
     private String email;
+    
+    @Column(name = "profile_picture")
     private String profilePicture;
+    
+    @Column(name = "date_joined")
     private Timestamp dateJoined;
+    
+    @Column(name = "last_login")
     private Timestamp lastLogin;
 
-    @JsonManagedReference
+    @JsonManagedReference(value = "user-tasks")
     @OneToMany(mappedBy = "user")
     private List<TodoEntity> tasks;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "user")
-    private List<ActivityLog> activityLogs;
-
     // Getters
-    public Long getUser_Id() {
-        return user_Id;
+    public Long getUserId() {
+        return userId;
     }
 
     public String getUsername() {
@@ -66,13 +69,9 @@ public class User {
         return tasks;
     }
 
-    public List<ActivityLog> getActivityLogs() {
-        return activityLogs;
-    }
-
     // Setters
-    public void setUser_Id(Long user_Id) {
-        this.user_Id = user_Id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public void setUsername(String username) {
@@ -107,7 +106,9 @@ public class User {
         this.tasks = tasks;
     }
 
-    public void setActivityLogs(List<ActivityLog> activityLogs) {
-        this.activityLogs = activityLogs;
+    // Constructor
+    public User() {
+        this.dateJoined = new Timestamp(System.currentTimeMillis());
+        this.lastLogin = new Timestamp(System.currentTimeMillis());
     }
 }

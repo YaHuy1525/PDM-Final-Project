@@ -10,7 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5000")
 public class BoardController {
 
     @Autowired
@@ -26,6 +26,25 @@ public class BoardController {
         return boardService.getBoardById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping
+    public ResponseEntity<Board> createBoard(@RequestBody Board board) {
+        try {
+            Board createdBoard = boardService.createBoard(board);
+            return ResponseEntity.ok(createdBoard);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+    @PostMapping("/{id}")
+    public ResponseEntity<Board> deleteBoard(@PathVariable Long id) {
+        try {
+            boardService.deleteBoard(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

@@ -23,15 +23,15 @@ public class TodoService {
     }
 
     public List<TodoEntity> getTasksByBoard(Long boardId) {
-        return todoRepository.findByBoard_BoardId(boardId);
+        return todoRepository.findByBoardId(boardId);
     }
 
     public List<TodoEntity> getTasksByUser(Long userId) {
-        return todoRepository.findByUser_User_Id(userId);
+        return todoRepository.findByUserId(userId);
     }
 
     public List<TodoEntity> getTasksByLabel(Long labelId) {
-        return todoRepository.findByLabel_LabelId(labelId);
+        return todoRepository.findByLabelId(labelId);
     }
 
     public List<TodoEntity> getTasksByStatus(String status) {
@@ -39,6 +39,10 @@ public class TodoService {
     }
 
     public TodoEntity createTodo(TodoEntity todo) {
+        // Set default status if not provided
+        if (todo.getStatus() == null) {
+            todo.setStatus("PENDING");
+        }
         return todoRepository.save(todo);
     }
 
@@ -46,14 +50,32 @@ public class TodoService {
         Optional<TodoEntity> todo = todoRepository.findById(id);
         if (todo.isPresent()) {
             TodoEntity existingTodo = todo.get();
-            existingTodo.setTitle(todoDetails.getTitle());
-            existingTodo.setDescription(todoDetails.getDescription());
-            existingTodo.setStatus(todoDetails.getStatus());
-            existingTodo.setDueDate(todoDetails.getDueDate());
-            existingTodo.setCreatedAt(todoDetails.getCreatedAt());
-            existingTodo.setBoard(todoDetails.getBoard());
-            existingTodo.setUser(todoDetails.getUser());
-            existingTodo.setLabel(todoDetails.getLabel());
+            
+            // Update basic fields
+            if (todoDetails.getTitle() != null) {
+                existingTodo.setTitle(todoDetails.getTitle());
+            }
+            if (todoDetails.getDescription() != null) {
+                existingTodo.setDescription(todoDetails.getDescription());
+            }
+            if (todoDetails.getStatus() != null) {
+                existingTodo.setStatus(todoDetails.getStatus());
+            }
+            if (todoDetails.getDueDate() != null) {
+                existingTodo.setDueDate(todoDetails.getDueDate());
+            }
+            
+            // Update relationships if provided
+            if (todoDetails.getBoard() != null) {
+                existingTodo.setBoard(todoDetails.getBoard());
+            }
+            if (todoDetails.getUser() != null) {
+                existingTodo.setUser(todoDetails.getUser());
+            }
+            if (todoDetails.getLabel() != null) {
+                existingTodo.setLabel(todoDetails.getLabel());
+            }
+            
             return todoRepository.save(existingTodo);
         }
         return null;

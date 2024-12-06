@@ -1,28 +1,37 @@
 package com.example.pdm_final_project.Entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table(name = "tasks")
 public class TodoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
     private Long taskId;
 
+    @Column(nullable = false)
     private String title;
+    
     private String description;
     private String status;
+    
+    @Column(name = "due_date")
     private Timestamp dueDate;
+    
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @JsonBackReference
+    @JsonBackReference(value = "board-tasks")
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @JsonBackReference(value = "user-tasks")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -30,9 +39,6 @@ public class TodoEntity {
     @ManyToOne
     @JoinColumn(name = "label_id")
     private Label label;
-
-    @OneToMany(mappedBy = "task")
-    private List<ActivityLog> activityLogs;
 
     // Getters
     public Long getTaskId() {
@@ -59,20 +65,35 @@ public class TodoEntity {
         return createdAt;
     }
 
+    @JsonIgnore
     public Board getBoard() {
         return board;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
 
+    @JsonIgnore
     public Label getLabel() {
         return label;
     }
 
-    public List<ActivityLog> getActivityLogs() {
-        return activityLogs;
+    // Custom getters for label information
+    @JsonProperty("labelId")
+    public Long getLabelId() {
+        return label != null ? label.getLabelId() : null;
+    }
+
+    @JsonProperty("labelName")
+    public String getLabelName() {
+        return label != null ? label.getName() : null;
+    }
+
+    @JsonProperty("labelColor")
+    public String getLabelColor() {
+        return label != null ? label.getColor() : null;
     }
 
     // Setters
@@ -112,7 +133,9 @@ public class TodoEntity {
         this.label = label;
     }
 
-    public void setActivityLogs(List<ActivityLog> activityLogs) {
-        this.activityLogs = activityLogs;
+    // Constructor
+    public TodoEntity() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.status = "PENDING";
     }
 }

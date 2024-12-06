@@ -3,6 +3,7 @@ package com.example.pdm_final_project.Entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -10,15 +11,32 @@ import java.util.List;
 public class Board {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "board_id")
     private Long boardId;
 
+    @Column(nullable = false)
     private String name;
+    
     private String description;
+    
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @JsonManagedReference
-    @OneToMany(mappedBy = "board")
-    private List<TodoEntity> tasks;
+    @JsonManagedReference(value = "board-tasks")
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<TodoEntity> tasks = new ArrayList<>();
+
+    // Default constructor
+    public Board() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    // Constructor with name and description
+    public Board(String name, String description) {
+        this();
+        this.name = name;
+        this.description = description;
+    }
 
     // Getters
     public Long getBoardId() {
@@ -60,5 +78,17 @@ public class Board {
 
     public void setTasks(List<TodoEntity> tasks) {
         this.tasks = tasks;
+    }
+
+    // Helper method to add a task
+    public void addTask(TodoEntity task) {
+        tasks.add(task);
+        task.setBoard(this);
+    }
+
+    // Helper method to remove a task
+    public void removeTask(TodoEntity task) {
+        tasks.remove(task);
+        task.setBoard(null);
     }
 }

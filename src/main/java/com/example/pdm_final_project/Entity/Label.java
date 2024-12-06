@@ -1,5 +1,6 @@
 package com.example.pdm_final_project.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -8,12 +9,14 @@ import java.util.List;
 public class Label {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "label_id")
     private Long labelId;
 
     private String name;
     private String color;
 
-    @OneToMany(mappedBy = "label")
+    @JsonManagedReference(value = "label-tasks")
+    @OneToMany(mappedBy = "label", cascade = CascadeType.ALL)
     private List<TodoEntity> tasks;
 
     // Getters
