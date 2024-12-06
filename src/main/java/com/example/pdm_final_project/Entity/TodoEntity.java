@@ -16,13 +16,13 @@ public class TodoEntity {
 
     @Column(nullable = false)
     private String title;
-    
+
     private String description;
     private String status;
-    
+
     @Column(name = "due_date")
     private Timestamp dueDate;
-    
+
     @Column(name = "created_at")
     private Timestamp createdAt;
 
@@ -36,11 +36,22 @@ public class TodoEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @JsonBackReference(value = "label-tasks")
     @ManyToOne
     @JoinColumn(name = "label_id")
     private Label label;
 
+    @Transient
+    private Long boardId;
+
+    @Transient
+    private Long userId;
+
+    @Transient
+    private Long labelId;
+
     // Getters
+    @JsonProperty("taskId")
     public Long getTaskId() {
         return taskId;
     }
@@ -80,12 +91,37 @@ public class TodoEntity {
         return label;
     }
 
-    // Custom getters for label information
+    @JsonProperty("boardId")
+    public Long getBoardId() {
+        if (boardId != null) return boardId;
+        return board != null ? board.getBoardId() : null;
+    }
+
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
+    }
+
+    @JsonProperty("userId")
+    public Long getUserId() {
+        if (userId != null) return userId;
+        return user != null ? user.getUserId() : null;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @JsonProperty("labelId")
     public Long getLabelId() {
+        if (labelId != null) return labelId;
         return label != null ? label.getLabelId() : null;
     }
 
+    public void setLabelId(Long labelId) {
+        this.labelId = labelId;
+    }
+
+    // Custom getters for label information
     @JsonProperty("labelName")
     public String getLabelName() {
         return label != null ? label.getName() : null;
@@ -136,6 +172,6 @@ public class TodoEntity {
     // Constructor
     public TodoEntity() {
         this.createdAt = new Timestamp(System.currentTimeMillis());
-        this.status = "PENDING";
+        this.status = "Ongoing";
     }
 }

@@ -2,6 +2,8 @@ package com.example.pdm_final_project.Controller;
 
 import com.example.pdm_final_project.Entity.Board;
 import com.example.pdm_final_project.Service.BoardService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,8 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")
-@CrossOrigin(origins = "http://localhost:5000")
+@CrossOrigin(origins = "http://localhost:5000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
 public class BoardController {
+    private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
     @Autowired
     private BoardService boardService;
@@ -34,17 +37,22 @@ public class BoardController {
             Board createdBoard = boardService.createBoard(board);
             return ResponseEntity.ok(createdBoard);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
-        }
-    }
-    @PostMapping("/{id}")
-    public ResponseEntity<Board> deleteBoard(@PathVariable Long id) {
-        try {
-            boardService.deleteBoard(id);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            logger.error("Error creating board: ", e);
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long id) {
+        logger.info("Received DELETE request for board with id: {}", id);
+        try {
+            boardService.deleteBoard(id);
+            logger.info("Successfully deleted board with id: {}", id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            logger.error("Error deleting board with id {}: ", id, e);
+            return ResponseEntity.badRequest()
+                .body("Error deleting board: " + e.getMessage());
+        }
+    }
 }

@@ -46,6 +46,15 @@ public class BoardService {
     }
 
     public void deleteBoard(Long id) {
-        boardRepository.deleteById(id);
+        Optional<Board> board = boardRepository.findById(id);
+        if (board.isPresent()) {
+            try {
+                boardRepository.deleteById(id);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to delete board: " + e.getMessage());
+            }
+        } else {
+            throw new RuntimeException("Board not found with id: " + id);
+        }
     }
 }
