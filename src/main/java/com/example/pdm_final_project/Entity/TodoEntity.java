@@ -4,10 +4,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "tasks")
+@Data
+@AllArgsConstructor
 public class TodoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,23 +28,23 @@ public class TodoEntity {
     private String status;
 
     @Column(name = "due_date")
-    private Timestamp dueDate;
+    private Date dueDate;
 
     @Column(name = "created_at")
     private Timestamp createdAt;
 
     @JsonBackReference(value = "board-tasks")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board;
 
     @JsonBackReference(value = "user-tasks")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonBackReference(value = "label-tasks")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "label_id")
     private Label label;
 
@@ -68,7 +75,7 @@ public class TodoEntity {
         return status;
     }
 
-    public Timestamp getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
@@ -149,7 +156,7 @@ public class TodoEntity {
         this.status = status;
     }
 
-    public void setDueDate(Timestamp dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 

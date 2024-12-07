@@ -40,21 +40,30 @@ public class TodoController {
         return todoService.getTasksByUser(userId);
     }
 
-    @GetMapping("/label/{labelId}")
-    public List<TodoEntity> getTasksByLabel(@PathVariable Long labelId) {
-        return todoService.getTasksByLabel(labelId);
+    @GetMapping("/filter")
+    public List<TodoEntity> getFilteredTasks(@RequestParam(required = false) String timeFilter) {
+        if (timeFilter == null) {
+            return todoService.getAllTodos();
+        }
+
+        return switch (timeFilter) {
+            case "today" ->todoService.getTodayTasks();
+            case "thisWeek"-> todoService.getThisWeekTasks();
+            case "thisMonth"-> todoService.getThisMonthTasks();
+            default-> todoService.getAllTodos();
+        };
     }
 
     @PostMapping
     public ResponseEntity<?> createTask(@RequestBody TodoEntity task) {
         try {
             logger.info("Received task creation request with boardId: {}, labelId: {}, userId: {}", 
-                       task.getBoardId(), task.getLabelId(), task.getUserId());
+                task.getBoardId(), task.getLabelId(), task.getUserId());
             
             TodoEntity createdTask = todoService.createTodo(task);
             
             logger.info("Created task with ID: {}, boardId: {}, labelId: {}", 
-                       createdTask.getTaskId(), createdTask.getBoardId(), createdTask.getLabelId());
+                createdTask.getTaskId(), createdTask.getBoardId(), createdTask.getLabelId());
             
             return ResponseEntity.ok(createdTask);
         } catch (Exception e) {
@@ -68,7 +77,7 @@ public class TodoController {
     public ResponseEntity<?> updateTask(@PathVariable Long id, @RequestBody TodoEntity taskDetails) {
         try {
             logger.info("Updating task {} with boardId: {}, labelId: {}", 
-                       id, taskDetails.getBoardId(), taskDetails.getLabelId());
+                id, taskDetails.getBoardId(), taskDetails.getLabelId());
             
             TodoEntity updatedTask = todoService.updateTodo(id, taskDetails);
             return ResponseEntity.ok(updatedTask);

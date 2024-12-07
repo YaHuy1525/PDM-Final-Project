@@ -7,7 +7,4 @@ import java.util.List;
 
 @Repository
 public interface LabelRepository extends JpaRepository<Label, Long> {
-    List<Label> findByName(String name);
-    List<Label> findByColor(String color);
-    boolean existsByName(String name);
 }
