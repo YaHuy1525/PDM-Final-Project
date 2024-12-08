@@ -22,22 +22,4 @@ public class LabelService {
         return labelRepository.findById(id);
     }
 
-    public Label createLabel(Label label) {
-        return labelRepository.save(label);
-    }
-
-    public Label updateLabel(Long id, Label labelDetails) {
-        Optional<Label> label = labelRepository.findById(id);
-        if (label.isPresent()) {
-            Label existingLabel = label.get();
-            existingLabel.setName(labelDetails.getName());
-            existingLabel.setColor(labelDetails.getColor());
-            return labelRepository.save(existingLabel);
-        }
-        return null;
-    }
-
-    public void deleteLabel(Long id) {
-        labelRepository.deleteById(id);
-    }
 }

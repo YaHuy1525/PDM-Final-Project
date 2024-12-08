@@ -34,17 +34,6 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    public Board updateBoard(Long id, Board boardDetails) {
-        Optional<Board> board = boardRepository.findById(id);
-        if (board.isPresent()) {
-            Board existingBoard = board.get();
-            existingBoard.setName(boardDetails.getName());
-            existingBoard.setDescription(boardDetails.getDescription());
-            return boardRepository.save(existingBoard);
-        }
-        return null;
-    }
-
     public void deleteBoard(Long id) {
         Optional<Board> board = boardRepository.findById(id);
         if (board.isPresent()) {

@@ -47,15 +47,10 @@ public class TodoService {
     }
 
     public TodoEntity createTodo(TodoEntity todo) {
-        // Set default status if not provided
         if (todo.getStatus() == null) {
-            todo.setStatus("PENDING");
+            todo.setStatus("Ongoing");
         }
-
-        // Set current timestamp for created_at
         todo.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-
-        // Load and set the board if boardId is provided
         if (todo.getBoardId() != null) {
             Board board = boardRepository.findById(todo.getBoardId())
                 .orElseThrow(() -> new RuntimeException("Board not found with id: " + todo.getBoardId()));
