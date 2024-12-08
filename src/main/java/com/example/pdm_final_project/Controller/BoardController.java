@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/boards")
-@CrossOrigin(origins = "http://localhost:5000", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "http://localhost:5000")
 public class BoardController {
     private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
