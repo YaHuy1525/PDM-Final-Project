@@ -34,17 +34,17 @@ public class TodoEntity {
     private Timestamp createdAt;
 
     @JsonBackReference(value = "board-tasks")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "board_id")
     private Board board;
 
     @JsonBackReference(value = "user-tasks")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonBackReference(value = "label-tasks")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "label_id")
     private Label label;
 
@@ -128,15 +128,14 @@ public class TodoEntity {
         this.labelId = labelId;
     }
 
-    // Custom getters for label information
     @JsonProperty("labelName")
     public String getLabelName() {
-        return label != null ? label.getName() : null;
+        return label.getName();
     }
 
     @JsonProperty("labelColor")
     public String getLabelColor() {
-        return label != null ? label.getColor() : null;
+        return label.getColor();
     }
 
     // Setters

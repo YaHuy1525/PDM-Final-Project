@@ -26,14 +26,11 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
     private List<TodoEntity> tasks = new ArrayList<>();
 
-    // Default constructor
     public Board() {
         this.createdAt = new Timestamp(System.currentTimeMillis());
     }
-
-    // Constructor with name and description
     public Board(String name, String description) {
-        this();
+        this.createdAt = new Timestamp(System.currentTimeMillis());
         this.name = name;
         this.description = description;
     }
@@ -80,15 +77,4 @@ public class Board {
         this.tasks = tasks;
     }
 
-    // Helper method to add a task
-    public void addTask(TodoEntity task) {
-        tasks.add(task);
-        task.setBoard(this);
-    }
-
-    // Helper method to remove a task
-    public void removeTask(TodoEntity task) {
-        tasks.remove(task);
-        task.setBoard(null);
-    }
 }
