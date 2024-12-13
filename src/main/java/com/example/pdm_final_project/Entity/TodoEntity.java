@@ -57,6 +57,12 @@ public class TodoEntity {
     @Transient
     private Long labelId;
 
+    public TodoEntity() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.status = "Ongoing";
+    }
+
+
     // Getters
     @JsonProperty("taskId")
     public Long getTaskId() {
@@ -175,9 +181,6 @@ public class TodoEntity {
         this.label = label;
     }
 
-    // Constructor
-    public TodoEntity() {
-        this.createdAt = new Timestamp(System.currentTimeMillis());
-        this.status = "Ongoing";
-    }
+
+    //I SHOULD HAVE USED LOMBOK
 }
